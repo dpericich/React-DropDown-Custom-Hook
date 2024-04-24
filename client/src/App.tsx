@@ -1,23 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Loader from './Loader';
+import { OptionInputType } from './shared/types';
+import StateDropDown from './StateDropDown';
+import useLoadDropDown from './hooks/useLoadDropDown';
 
 function App() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [currentState, setCurrentState] = useState<string>('');
+  const [stateList, setStateList] = useState<OptionInputType[]>([]);
+
+  useLoadDropDown('http://localhost:3003/state-names', setIsLoading, setCurrentState, setStateList);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>U.S. State Selection</h1>
+        { isLoading ? <Loader /> : <StateDropDown currentState={currentState} stateList={stateList} setCurrentState={setCurrentState} /> }
       </header>
     </div>
   );
